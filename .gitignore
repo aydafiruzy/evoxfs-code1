@@ -10,3 +10,6 @@ results/*_all_runs.csv
 results/*_extra_runs.csv
 results/*_convergence_curves.csv
 *.pkl
+
+# CatBoost training logs
+catboost_info/
