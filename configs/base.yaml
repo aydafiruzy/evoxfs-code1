@@ -1,0 +1,106 @@
+# ============================================================
+# EvoX-FS — shared settings for every dataset.
+# A dataset file (wine.yaml, sonar.yaml, ...) only needs to set
+# `dataset:` and can override any value below.
+# Change a value here -> it changes for ALL datasets.
+# ============================================================
+
+# --- data & protocol ---
+seed: 42
+test_size: 0.20
+n_runs: 30
+
+# --- execution (does not change the results) ---
+n_jobs: null              # null = all CPU cores
+checkpoint_rounds: 4      # save progress every N parallel rounds
+
+# --- optimiser budget ---
+population_sizes: [10, 20, 50, 100]
+max_evals: 1000
+threshold: 0.5            # gene >= 0.5 -> feature selected
+
+# --- DE parameters ---
+F_fixed: 0.5
+CR_fixed: 0.9
+F_low: 0.1
+F_up: 0.9
+jump_rate: 0.3            # OBL jumping rate
+degenerate_tau: 0.1       # tau used when all fitness values are equal
+
+# --- SHAP-guided initialisation ---
+shap_top_ratio: 0.30
+shap_high_range: [0.5, 1.0]
+shap_low_range: [0.0, 0.5]
+init_ratios_hybrid: {random: 0.50, shap: 0.30, opp_shap: 0.10, opp_random: 0.10}
+init_ratios_shap: {random: 0.70, shap: 0.30}
+
+# --- fitness (each weight set must sum to 1) ---
+fitness_weights:
+  classic2:   {error: 0.60, size: 0.40, shap_loss: 0.00, redundancy: 0.00}
+  scenario_A: {error: 0.6666666666666666, size: 0.1111111111111111, shap_loss: 0.2222222222222222, redundancy: 0.00}
+  scenario_B: {error: 0.50, size: 0.10, shap_loss: 0.20, redundancy: 0.20}
+fitness_cv_folds: 5
+empty_subset_penalty: 1000000.0
+
+# --- SHAP ---
+shap_rf_trees: 100
+force_plot_samples: 3
+beeswarm_max_classes: 3
+top_features_shown: 20
+
+# --- hyperparameter tuning (Default vs Greedy) ---
+tuning: {cv_folds: 5, cv_repeats: 2, keep_default_if_within_std: true}
+tuning_selection: cv_rule     # cv_rule | Default | Greedy
+greedy_tuning: {grid_points: 6, max_passes: 2}
+
+# library defaults (empty = the library's own defaults)
+default_params: {XGBoost: {}, LightGBM: {}, CatBoost: {}, Fitness XGBoost: {}}
+fixed_params: {XGBoost: {}, LightGBM: {subsample_freq: 1}, CatBoost: {}, Fitness XGBoost: {}}
+
+# search spaces: [type, low, high, log_scale]
+search_spaces:
+  XGBoost:
+    n_estimators: [int, 50, 500, false]
+    max_depth: [int, 2, 8, false]
+    learning_rate: [float, 0.01, 0.3, true]
+    subsample: [float, 0.5, 1.0, false]
+    colsample_bytree: [float, 0.5, 1.0, false]
+    reg_lambda: [float, 0.001, 10.0, true]
+    min_child_weight: [float, 1.0, 10.0, false]
+  LightGBM:
+    n_estimators: [int, 50, 500, false]
+    max_depth: [int, 2, 8, false]
+    num_leaves: [int, 4, 64, false]
+    learning_rate: [float, 0.01, 0.3, true]
+    subsample: [float, 0.5, 1.0, false]
+    colsample_bytree: [float, 0.5, 1.0, false]
+    reg_lambda: [float, 0.001, 10.0, true]
+    min_child_samples: [int, 2, 30, false]
+  CatBoost:
+    iterations: [int, 50, 500, false]
+    depth: [int, 2, 8, false]
+    learning_rate: [float, 0.01, 0.3, true]
+    l2_leaf_reg: [float, 1.0, 10.0, false]
+  Fitness XGBoost:            # trained thousands of times -> capped size
+    n_estimators: [int, 30, 150, false]
+    max_depth: [int, 2, 6, false]
+    learning_rate: [float, 0.01, 0.3, true]
+    subsample: [float, 0.5, 1.0, false]
+    colsample_bytree: [float, 0.5, 1.0, false]
+    reg_lambda: [float, 0.001, 10.0, true]
+
+eval_models: [XGBoost, LightGBM, CatBoost]
+
+# --- additional experiments (control fitness + sensitivity) ---
+extra:
+  control_fitness:
+    scenario_B_noSHAP: {error: 0.70, size: 0.10, shap_loss: 0.00, redundancy: 0.20}
+  control_methods:
+    "DE + Scenario B fitness (no SHAP)":
+      {fitness: scenario_B_noSHAP, init: random, obl: false, adaptive: false, compare_with: "DE + Scenario B fitness"}
+    "EvoX-FS (Scenario B, no SHAP)":
+      {fitness: scenario_B_noSHAP, init: hybrid, obl: true, adaptive: true, compare_with: "EvoX-FS"}
+  sensitivity_method: EvoX-FS
+  sensitivity_term: size
+  sensitivity_values: [0.10, 0.20, 0.30, 0.40]
+  sensitivity_population: 20
