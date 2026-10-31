@@ -1,0 +1,2 @@
+# UCI Breast Cancer Wisconsin (Diagnostic): 569 samples, 30 features, 2 classes (scikit-learn)
+dataset: breast_cancer

@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Heavy experiment outputs: keep them on Google Drive, not in git
+results/checkpoints_*/
+results/*_all_runs.csv
+results/*_extra_runs.csv
+results/*_convergence_curves.csv
+*.pkl
+
+# CatBoost training logs
+catboost_info/

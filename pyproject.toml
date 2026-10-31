@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "evoxfs"
+version = "1.0.0"
+description = "EvoX-FS: SHAP-guided, self-adaptive, opposition-based Differential Evolution for feature selection"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy", "pandas", "scipy", "scikit-learn", "matplotlib", "joblib", "pyyaml",
+    "xgboost", "lightgbm", "catboost", "shap",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
