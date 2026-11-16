@@ -6,6 +6,7 @@ One row per experiment. Newest at the top.
 
 | Date | Dataset | Code version | What changed | Main result (NP = 20) | Results |
 |---|---|---|---|---|---|
+| 2026-11-16 | 11 UCI sets of MI-MPODE (Yu et al., ESWA 2025) | `scripts/paper_mimpode` | KNN wrapper, paper protocol (NP 10, 1000 evals, alpha 0.95, 70/30, 30 runs) + full-feature XGB/LGBM/CatBoost/KNN | EvoX-FS (KNN) beats our DE on test acc in 8/11, fewer features in 11/11; paper's accuracies look like in-search accuracies (see summary) | `results/paper_mimpode/summary.md` (in git) |
 | 2026-10-18 | Sonar | `v1.0` (original notebook) | first full run + extra experiments | EvoX-FS F1 0.869 with 30.5/60 features; all features 0.904 | `checkpoints_sonar_83d5d3c3e1`, `checkpoints_sonar_extra_89949cfeda` |
 | 2026-10-17 | Breast Cancer | `v1.0` (original notebook) | first full run + extra experiments | EvoX-FS F1 0.956 with 20.6/30 features; all features 0.959 | `checkpoints_breast_cancer_48e3e8305e`, `checkpoints_breast_cancer_extra_a889b1a812` |
 | 2026-10-16 | Wine | `v1.0` (original notebook) | first full run + extra experiments | EvoX-FS F1 1.000 with 8.7/13 features; all features 1.000 | `checkpoints_wine_8cbac0018b`, `checkpoints_wine_extra_628ed52522` |
